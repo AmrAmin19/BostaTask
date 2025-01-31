@@ -33,6 +33,6 @@ class DistrictAdapter : ListAdapter<District, DistrictAdapter.DistrictViewHolder
     override fun onBindViewHolder(holder: DistrictViewHolder, position: Int) {
         var district = getItem(position)
         holder.binding.districtName.text = district.districtName
-        holder.binding.uncoveredTag.visibility = if (district.dropOffAvailability) RecyclerView.GONE else RecyclerView.VISIBLE
+        holder.binding.uncoveredTag.visibility = if (district.dropOffAvailability) RecyclerView.VISIBLE else RecyclerView.GONE
     }
 }

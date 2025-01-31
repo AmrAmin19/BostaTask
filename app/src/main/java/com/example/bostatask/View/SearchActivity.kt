@@ -2,6 +2,7 @@ package com.example.bostatask.View
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -37,16 +38,24 @@ class SearchActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.cities.collect{ resource ->
                 when (resource) {
-                    is ApiState.Loading -> {}
+                    is ApiState.Loading -> {showLoading(true)}
                     is ApiState.Success<List<City>> -> {
+                        showLoading(false)
                         adapter.submitList(resource.data)
                        // Log.d("AmrTest", resource.data.first().cityName)
                     }
                     is ApiState.Error -> {
+                        showLoading(false)
                         Toast.makeText(this@SearchActivity, resource.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
     }
+
+
+    private fun showLoading(isLoading: Boolean) {
+         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
 }
