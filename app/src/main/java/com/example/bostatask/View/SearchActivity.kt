@@ -1,28 +1,37 @@
-package com.example.bostatask
+package com.example.bostatask.View
 
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bostatask.Model.ApiState
 import com.example.bostatask.Model.City
+import com.example.bostatask.R
+import com.example.bostatask.databinding.ActivitySearchBinding
 import com.example.bostatask.viewModel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     val viewModel: SearchViewModel by viewModels()
+    lateinit var binding: ActivitySearchBinding
+
+    lateinit var adapter: CityAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = CityAdapter()
+        binding.recyclerView.adapter = adapter
 
         viewModel.getCities()
         lifecycleScope.launch {
@@ -30,10 +39,11 @@ class MainActivity : AppCompatActivity() {
                 when (resource) {
                     is ApiState.Loading -> {}
                     is ApiState.Success<List<City>> -> {
-
+                        adapter.submitList(resource.data)
+                       // Log.d("AmrTest", resource.data.first().cityName)
                     }
                     is ApiState.Error -> {
-                        Toast.makeText(this@MainActivity, resource.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SearchActivity, resource.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
