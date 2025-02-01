@@ -43,6 +43,25 @@ class SearchViewModel @Inject constructor(private val repo: Irepo) : ViewModel()
         }
     }
 
+//    private fun filterCities(query: String) {
+//        val allCities = (_cities.value as? ApiState.Success)?.data ?: emptyList()
+//
+//        _filteredCities.value = if (query.isNotEmpty()) {
+//            allCities.filter { city ->
+//                city.cityName.lowercase().contains(query.lowercase()) ||
+//                        city.districts.any { district -> district.districtName.lowercase().contains(query.lowercase()) }
+//            }.map { city ->
+//                // Ensure the city is expanded if a district is matched
+//                if (city.districts.any { district -> district.districtName.lowercase().contains(query.lowercase()) }) {
+//                    city.copy(isExpanded = true)
+//                } else {
+//                    city
+//                }
+//            }
+//        } else {
+//            allCities
+//        }
+//    }
 
 
     private fun filterCities(query: String) {

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bostatask.Model.ApiState
@@ -35,6 +36,15 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
 
         viewModel.getCities()
+
+        lifecycleScope.launch {
+            viewModel.filteredCities.collect { cities ->
+                adapter.submitList(cities)
+            }
+        }
+
+        setupSearch()
+
         lifecycleScope.launch {
             viewModel.cities.collect{ resource ->
                 when (resource) {
@@ -51,6 +61,22 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+
+
+    private fun setupSearch() {
+        binding.searchView.setOnQueryTextListener(object :
+            android.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.updateSearchQuery(newText ?: "")
+                return true
+            }
+        })
     }
 
 

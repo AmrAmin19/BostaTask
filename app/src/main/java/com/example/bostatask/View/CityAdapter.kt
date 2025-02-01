@@ -28,9 +28,14 @@ class CityAdapter:ListAdapter<City, CityAdapter.CityViewHolder>(CityDiff())
 
 
     lateinit var binding: CityItemBinding
-    lateinit var adapter: DistrictAdapter
+   // lateinit var adapter: DistrictAdapter
+
+
 
     class CityViewHolder(val binding: CityItemBinding): RecyclerView.ViewHolder(binding.root)
+    {
+       val adapter = DistrictAdapter()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val inflater : LayoutInflater = parent.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -44,15 +49,16 @@ class CityAdapter:ListAdapter<City, CityAdapter.CityViewHolder>(CityDiff())
 
         // test the nested
         holder.binding.districtRecycler.layoutManager= LinearLayoutManager(holder.itemView.context)
-        adapter = DistrictAdapter()
-        holder.binding.districtRecycler.adapter = adapter
-        adapter.submitList(city.districts)
+        holder.binding.districtRecycler.adapter = holder.adapter
+//        adapter.updateList(city.districts)
 
         // colapse tech test
 
         if (city.isExpanded) {
             holder.binding.districtContainer.visibility = RecyclerView.VISIBLE
             holder.binding.arrowIcon.setImageResource(R.drawable.baseline_arrow_upward_24)
+            //test
+           holder.adapter.updateList(city.districts)
         } else {
             holder.binding.districtContainer.visibility = RecyclerView.GONE
             holder.binding.arrowIcon.setImageResource(R.drawable.baseline_arrow_downward_24)
